@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/home_screen.dart';
 
 class AddTask extends StatefulWidget {
@@ -161,18 +162,21 @@ class _AddTaskState extends State<AddTask> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-                      final task = <String, dynamic>{
-                        "taskName": taskNameController.text,
-                        "taskDescription": taskDescriptionController.text,
-                        "isHighPriority": isHighPriority,
-                      };
+                      final TaskModel newTask = TaskModel(
+                        taskName: taskNameController.text,
+                        taskDescription: taskDescriptionController.text,
+                        isHighPriority: isHighPriority,
+                      );
+                      
                       final pref = await SharedPreferences.getInstance();
                       final taskListJson = pref.getString("tasks");
                       List<dynamic> taskListMaped = [];
                       if(taskListJson != null) {
                           taskListMaped = jsonDecode(taskListJson);
                       }
-                      taskListMaped.add(task);
+                      //using toMap() of the TaskModel method to so that we can add to the 
+                      //dynamic list of tasks
+                      taskListMaped.add(newTask.toMap()); 
                       final taskListEncoded = jsonEncode(taskListMaped);
                       await pref.setString("tasks", taskListEncoded);
                       

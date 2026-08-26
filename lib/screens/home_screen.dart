@@ -36,26 +36,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadTasks() async {
     final pref = await SharedPreferences.getInstance();
-    final retrievedTasks = pref.getString("tasks");
-    // print("retrieved tasks: $retrievedTasks");
-    if (retrievedTasks != null) {
-      List<dynamic> taskListDecoded =
-          jsonDecode(retrievedTasks) as List<dynamic>;
-      // print("Task after Decoding: $taskListDecoded");
-
-      //maping each element inside the list to the TaskModel class
-      final tasksModeled = taskListDecoded.map((element) {
-        return TaskModel(
-          taskName: element["taskName"],
-          taskDescription: element["taskDescription"],
-          isHighPriority: element["isHighPriority"],
-        );
-      }).toList();
-
-      print(tasks);
-
+    final retrievedJsonTasks = pref.getString("tasks");
+    
+    if (retrievedJsonTasks != null) {
+      List<dynamic> tasksDecoded = jsonDecode(retrievedJsonTasks);
       setState(() {
-        tasks = tasksModeled;
+        tasks = tasksDecoded.map(
+          (element){
+            return TaskModel.fromJson(element);
+          }
+        ).toList();
       });
     }
   }
