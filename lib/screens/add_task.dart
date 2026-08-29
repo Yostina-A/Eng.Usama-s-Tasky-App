@@ -174,9 +174,9 @@ class _AddTaskState extends State<AddTask> {
                       if(taskListJson != null) {
                           taskListMaped = jsonDecode(taskListJson);
                       }
-                      //using toMap() of the TaskModel method to so that we can add to the 
+                      //using toJson() of the TaskModel method to so that we can add to the 
                       //dynamic list of tasks
-                      taskListMaped.add(newTask.toMap()); 
+                      taskListMaped.add(newTask.toJson()); 
                       final taskListEncoded = jsonEncode(taskListMaped);
                       await pref.setString("tasks", taskListEncoded);
                       

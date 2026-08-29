@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? username = "friend";
   List<TaskModel> tasks = [];
-  
 
   @override
   void initState() {
@@ -37,15 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
   void _loadTasks() async {
     final pref = await SharedPreferences.getInstance();
     final retrievedJsonTasks = pref.getString("tasks");
-    
+
     if (retrievedJsonTasks != null) {
       List<dynamic> tasksDecoded = jsonDecode(retrievedJsonTasks);
       setState(() {
-        tasks = tasksDecoded.map(
-          (element){
-            return TaskModel.fromJson(element);
-          }
-        ).toList();
+        tasks = tasksDecoded.map((element) {
+          return TaskModel.fromJson(element);
+        }).toList();
       });
     }
   }
@@ -77,7 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Color(0xFF181818),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -135,16 +133,73 @@ class _HomeScreenState extends State<HomeScreen> {
                   SvgPicture.asset("assets/images/waving-hand.svg"),
                 ],
               ),
-            
-            //displaying the tasks on screen
-            if(tasks.isNotEmpty)
-              Column(children: [
-                Text(tasks[0].taskName, style: TextStyle(color: Colors.white),),
-                Text(tasks[0].taskDescription, style: TextStyle(color: Colors.white),),
-                Text(tasks[0].isHighPriority.toString(), style: TextStyle(color: Colors.white),),
-
-              ],)
-            
+              SizedBox(height: 16),
+              if (tasks.isNotEmpty)
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: tasks.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return Padding(
+                        padding: const EdgeInsetsGeometry.only(top: 8),
+                        child: Container(
+                          height: 56,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF282828),
+                            borderRadius: BorderRadius.circular(16),
+          
+                          ),
+                          // the row of each task components
+                          child: Row(
+                            children: [
+                              Checkbox(
+                                value: tasks[index].isDone,
+                                onChanged: (value) async{
+                                  setState(() {
+                                    tasks[index].isDone = value ?? false;
+                                  });
+                                  final pref = await SharedPreferences.getInstance();
+                                  final updatedTasks = tasks.map((element) => element.toJson()).toList();
+                                  await pref.setString("tasks", jsonEncode(updatedTasks));
+                                } ,
+                                activeColor: Color(0xFF15B86C),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  //task name
+                                  Text(
+                                    tasks[index].taskName,
+                                    style: TextStyle(color: Color(0xFFFFFCFC)),
+                                  ),
+                                  //task decription
+                                  Text(
+                                    tasks[index].taskDescription,
+                                    style: TextStyle(color: Color(0xFFFFFCFC)),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+          
+              //displaying the tasks on screen
+              // if(tasks.isNotEmpty)
+              //   Column(children: [
+              //     Text(tasks[0].taskName, style: TextStyle(color: Colors.white),),
+              //     Text(tasks[0].taskDescription, style: TextStyle(color: Colors.white),),
+              //     Text(tasks[0].isHighPriority.toString(), style: TextStyle(color: Colors.white),),
+          
+              //   ],)
             ],
           ),
         ),
