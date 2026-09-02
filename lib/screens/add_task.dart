@@ -32,9 +32,7 @@ class _AddTaskState extends State<AddTask> {
       
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
-        title: Text("Add Task"),
-        titleTextStyle: TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
-        iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
+        title: Text("New Task"),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

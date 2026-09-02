@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/add_task.dart';
+import 'package:tasky/widgets/task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? username = "friend";
   List<TaskModel> tasks = [];
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -34,6 +36,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadTasks() async {
+    setState(() {
+      isLoading = true;
+    });
     final pref = await SharedPreferences.getInstance();
     final retrievedJsonTasks = pref.getString("tasks");
 
@@ -45,6 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
         }).toList();
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -73,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-    
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -136,100 +144,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 16),
-              if (tasks.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: tasks.length,
-                    padding: EdgeInsets.only(bottom: 60),
-                    itemBuilder: (BuildContext context, int index) {
-                      return Padding(
-                        padding: const EdgeInsetsGeometry.only(top: 8),
-                        child: Container(
-                          height: 56,
-                          width: MediaQuery.of(context).size.width,
-                          decoration: BoxDecoration(
-                            color: Color(0xFF282828),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          // the row of each task components
-                          child: Row(
-                            children: [
-                              Checkbox(
-                                value: tasks[index].isDone,
-                                onChanged: (value) async {
-                                  setState(() {
-                                    tasks[index].isDone = value ?? false;
-                                  });
-                                  final pref =
-                                      await SharedPreferences.getInstance();
-                                  final updatedTasks = tasks
-                                      .map((element) => element.toJson())
-                                      .toList();
-                                  await pref.setString(
-                                    "tasks",
-                                    jsonEncode(updatedTasks),
-                                  );
-                                },
-                                activeColor: Color(0xFF15B86C),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                              ),
-
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    //task name
-                                    Text(
-                                      tasks[index].taskName,
-                                      style: TextStyle(
-                                        color: tasks[index].isDone
-                                            ? Color(0xFFA0A0A0)
-                                            : Color(0xFFFFFCFC),
-                                        decoration: tasks[index].isDone
-                                            ? TextDecoration.lineThrough
-                                            : TextDecoration.none,
-                                        decorationColor: Color(0xFFA0A0A0),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                    //task decription
-                                    if(tasks[index].taskDescription.isNotEmpty)
-                                    Text(
-                                      tasks[index].taskDescription,
-                                      style: TextStyle(
-                                        color: tasks[index].isDone
-                                            ? Color(0xFFA0A0A0)
-                                            : Color(0xFFFFFCFC),
-                                        decoration: tasks[index].isDone
-                                            ? TextDecoration.lineThrough
-                                            : TextDecoration.none,
-                                        decorationColor: Color(0xFFA0A0A0),
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      maxLines: 1,
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.more_vert),
-                                color: tasks[index].isDone
-                                    ? Color(0xFFA0A0A0)
-                                    : Color(0xFFFFFCFC),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+              Expanded(
+                child: isLoading
+                    ? Center(child: CircularProgressIndicator(value: 20))
+                    : TaskListWidget(
+                        tasks: tasks,
+                        onTap: (bool? value, int? index) async {
+                          setState(() {
+                            tasks[index!].isDone = value ?? false;
+                          });
+                          final pref = await SharedPreferences.getInstance();
+                          final updatedTasks = tasks
+                              .map((element) => element.toJson())
+                              .toList();
+                          await pref.setString(
+                            "tasks",
+                            jsonEncode(updatedTasks),
+                          );
+                        },
+                      ),
+              ),
             ],
           ),
         ),

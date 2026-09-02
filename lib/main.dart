@@ -9,7 +9,6 @@ void main() async {
 
   final pref = await SharedPreferences.getInstance();
   String? username = pref.getString("username");
-  
 
   runApp(MyApp(username: username));
 }
@@ -26,7 +25,11 @@ class MyApp extends StatelessWidget {
       title: 'Tasky',
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFF181818),
-        
+        appBarTheme: AppBarTheme(
+          backgroundColor: Color(0xFF181818),
+          titleTextStyle: TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
+          iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
+        ),
       ),
       home: username == null ? StartScreen() : MainScreen(),
     );
