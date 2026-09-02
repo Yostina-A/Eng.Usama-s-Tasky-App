@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/add_task.dart';
@@ -53,8 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: SizedBox(
         height: 44,
         child: FloatingActionButton.extended(
-          onPressed: () {
-            Navigator.push(
+          onPressed: () async {
+            await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
@@ -62,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             );
+            _loadTasks();
           },
           backgroundColor: Color(0xFF15B86C),
           foregroundColor: Color(0xFFFFFCFC),
@@ -72,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      backgroundColor: Color(0xFF181818),
+    
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -96,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Color(0xFFFFFFFF),
                           fontSize: 16,
                           fontWeight: FontWeight.w400,
+                          //decoration: tasks[index].isDone? TextDecoration.strikethrough : TextDecoration.none,
                         ),
                       ),
                       SizedBox(height: 2),
@@ -138,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Expanded(
                   child: ListView.builder(
                     itemCount: tasks.length,
+                    padding: EdgeInsets.only(bottom: 60),
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsetsGeometry.only(top: 8),
@@ -147,42 +150,78 @@ class _HomeScreenState extends State<HomeScreen> {
                           decoration: BoxDecoration(
                             color: Color(0xFF282828),
                             borderRadius: BorderRadius.circular(16),
-          
                           ),
                           // the row of each task components
                           child: Row(
                             children: [
                               Checkbox(
                                 value: tasks[index].isDone,
-                                onChanged: (value) async{
+                                onChanged: (value) async {
                                   setState(() {
                                     tasks[index].isDone = value ?? false;
                                   });
-                                  final pref = await SharedPreferences.getInstance();
-                                  final updatedTasks = tasks.map((element) => element.toJson()).toList();
-                                  await pref.setString("tasks", jsonEncode(updatedTasks));
-                                } ,
+                                  final pref =
+                                      await SharedPreferences.getInstance();
+                                  final updatedTasks = tasks
+                                      .map((element) => element.toJson())
+                                      .toList();
+                                  await pref.setString(
+                                    "tasks",
+                                    jsonEncode(updatedTasks),
+                                  );
+                                },
                                 activeColor: Color(0xFF15B86C),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
                                 ),
-                                
                               ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  //task name
-                                  Text(
-                                    tasks[index].taskName,
-                                    style: TextStyle(color: Color(0xFFFFFCFC)),
-                                  ),
-                                  //task decription
-                                  Text(
-                                    tasks[index].taskDescription,
-                                    style: TextStyle(color: Color(0xFFFFFCFC)),
-                                  ),
-                                ],
+
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    //task name
+                                    Text(
+                                      tasks[index].taskName,
+                                      style: TextStyle(
+                                        color: tasks[index].isDone
+                                            ? Color(0xFFA0A0A0)
+                                            : Color(0xFFFFFCFC),
+                                        decoration: tasks[index].isDone
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                        decorationColor: Color(0xFFA0A0A0),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                    //task decription
+                                    if(tasks[index].taskDescription.isNotEmpty)
+                                    Text(
+                                      tasks[index].taskDescription,
+                                      style: TextStyle(
+                                        color: tasks[index].isDone
+                                            ? Color(0xFFA0A0A0)
+                                            : Color(0xFFFFFCFC),
+                                        decoration: tasks[index].isDone
+                                            ? TextDecoration.lineThrough
+                                            : TextDecoration.none,
+                                        decorationColor: Color(0xFFA0A0A0),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.more_vert),
+                                color: tasks[index].isDone
+                                    ? Color(0xFFA0A0A0)
+                                    : Color(0xFFFFFCFC),
                               ),
                             ],
                           ),
@@ -191,15 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
                 ),
-          
-              //displaying the tasks on screen
-              // if(tasks.isNotEmpty)
-              //   Column(children: [
-              //     Text(tasks[0].taskName, style: TextStyle(color: Colors.white),),
-              //     Text(tasks[0].taskDescription, style: TextStyle(color: Colors.white),),
-              //     Text(tasks[0].isHighPriority.toString(), style: TextStyle(color: Colors.white),),
-          
-              //   ],)
             ],
           ),
         ),

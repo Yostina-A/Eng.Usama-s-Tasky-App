@@ -29,7 +29,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF181818),
+      
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         title: Text("Add Task"),
@@ -102,12 +102,12 @@ class _AddTaskState extends State<AddTask> {
                         TextFormField(
                           controller: taskDescriptionController,
                           maxLines: 5,
-                          validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Please enter Task Description";
-                            }
-                            return null;
-                          },
+                          // validator: (String? value) {
+                          //   if (value == null || value.trim().isEmpty) {
+                          //     return "Please enter Task Description";
+                          //   }
+                          //   return null;
+                          // },
                           style: TextStyle(
                             color: Color(0xFFFFFCFC),
                             fontSize: 16,
@@ -182,13 +182,13 @@ class _AddTaskState extends State<AddTask> {
                       
                       
                     }
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (BuildContext context){
-                          return HomeScreen();
-                    }));
-                  },
+                    Navigator.of(context).pop();
+                  //     context, 
+                  //     MaterialPageRoute(
+                  //       builder: (BuildContext context){
+                  //         return HomeScreen();
+                  //   }));
+                   },
                   label: Text("Add Task"),
                   icon: Icon(Icons.add),
                   style: ElevatedButton.styleFrom(
