@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:tasky/models/task_model.dart';
 
 class TaskListWidget extends StatelessWidget {
-  const TaskListWidget({super.key, required this.tasks, required this.onTap,  this.emptyMessage});
+  const TaskListWidget({
+    super.key,
+    required this.tasks,
+    required this.onTap,
+    this.emptyMessage,
+  });
 
   final List<TaskModel> tasks;
   final Function(bool?, int?) onTap;
@@ -12,7 +17,10 @@ class TaskListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return tasks.isEmpty
         ? Center(
-            child: Text(emptyMessage ?? "No Data", style: TextStyle(color: Colors.white)),
+            child: Text(
+              emptyMessage ?? "No Data",
+              style: TextStyle(color: Colors.white),
+            ),
           )
         : ListView.builder(
             itemCount: tasks.length,

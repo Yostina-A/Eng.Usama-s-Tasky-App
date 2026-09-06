@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky/models/task_model.dart';
-import 'package:tasky/screens/home_screen.dart';
+
 
 class AddTask extends StatefulWidget {
   AddTask({super.key});
@@ -160,18 +160,21 @@ class _AddTaskState extends State<AddTask> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-                      final TaskModel newTask = TaskModel(
-                        taskName: taskNameController.text,
-                        taskDescription: taskDescriptionController.text,
-                        isHighPriority: isHighPriority,
-                      );
-                      
                       final pref = await SharedPreferences.getInstance();
                       final taskListJson = pref.getString("tasks");
                       List<dynamic> taskListMaped = [];
                       if(taskListJson != null) {
                           taskListMaped = jsonDecode(taskListJson);
                       }
+
+                      final TaskModel newTask = TaskModel(
+                        id: taskListMaped.length + 1,
+                        taskName: taskNameController.text,
+                        taskDescription: taskDescriptionController.text,
+                        isHighPriority: isHighPriority,
+                      );
+                      
+                      
                       //using toJson() of the TaskModel method to so that we can add to the 
                       //dynamic list of tasks
                       taskListMaped.add(newTask.toJson()); 
@@ -181,11 +184,7 @@ class _AddTaskState extends State<AddTask> {
                       
                     }
                     Navigator.of(context).pop();
-                  //     context, 
-                  //     MaterialPageRoute(
-                  //       builder: (BuildContext context){
-                  //         return HomeScreen();
-                  //   }));
+                 
                    },
                   label: Text("Add Task"),
                   icon: Icon(Icons.add),

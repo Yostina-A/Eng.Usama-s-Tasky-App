@@ -53,18 +53,34 @@ class _TodoScreenState extends State<TodoScreen> {
           child: isLoading
               ? Center(child: CircularProgressIndicator(value: 20))
               : TaskListWidget(
-                emptyMessage: "No Tasks Found",
+                  emptyMessage: "No Tasks Found",
                   tasks: tasks,
                   onTap: (bool? value, int? index) async {
                     setState(() {
                       tasks[index!].isDone = value ?? false;
                     });
                     final pref = await SharedPreferences.getInstance();
-                    final updatedTasks = tasks
-                        .map((element) => element.toJson())
-                        .toList();
-                    await pref.setString("tasks", jsonEncode(updatedTasks));
-                    _loadTasks();
+
+                    final allPreviousTasks = pref.getString("tasks");
+                    if (allPreviousTasks != null) {
+                      List<TaskModel> previousTaskList =
+                          (jsonDecode(allPreviousTasks) as List<dynamic>)
+                              .map((element) => TaskModel.fromJson(element))
+                              .toList();
+                      // this is where we get the idex of the tasks we're in from the main list (in
+                      // home screen) not the current "undone" to-do list
+                      int currentTaskIndex = previousTaskList.indexWhere(
+                        (e) => e.id == tasks[index!].id,
+                      );
+                      // this replaces the old data in the old main list with the new 
+                      //status of the task
+                      previousTaskList[currentTaskIndex] = tasks[index!];
+                      await pref.setString(
+                        "tasks",
+                        jsonEncode(previousTaskList),
+                      );
+                      _loadTasks();
+                    }
                   },
                 ),
         ),
