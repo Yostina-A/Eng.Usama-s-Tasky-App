@@ -86,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
         selectedItemColor: Color(0xFF15B86C),
         unselectedItemColor: Color(0xFFC6C6C6),
       ),
-      body: _screens[_currentIndex],
+      body: SafeArea(child: _screens[_currentIndex]),
     );
   }
 }

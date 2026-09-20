@@ -30,6 +30,33 @@ class MyApp extends StatelessWidget {
           titleTextStyle: TextStyle(color: Color(0xFFFFFFFF), fontSize: 20),
           iconTheme: IconThemeData(color: Color(0xFFFFFFFF)),
         ),
+        switchTheme: SwitchThemeData(
+          trackColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)) {
+              return Color(0xFF15B86C);
+            }
+            return Colors.white;
+          }),
+          thumbColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)) {
+              return Color(0xFFFFFCFC);
+            }
+            return Color(0xFF9E9E9E);
+          }),
+          trackOutlineColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)) {
+              return Colors.transparent;
+            }
+            return Color(0xFF9E9E9E);
+          }),
+          trackOutlineWidth: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)) {
+              return 0;
+            }
+            return 2;
+          }),
+
+        ),
       ),
       home: username == null ? StartScreen() : MainScreen(),
     );

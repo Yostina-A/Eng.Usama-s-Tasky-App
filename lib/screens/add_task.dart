@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky/models/task_model.dart';
 
-
 class AddTask extends StatefulWidget {
   AddTask({super.key});
 
@@ -29,7 +28,6 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         backgroundColor: Color(0xFF181818),
         title: Text("New Task"),
@@ -148,7 +146,6 @@ class _AddTaskState extends State<AddTask> {
                                   isHighPriority = value;
                                 });
                               },
-                              activeTrackColor: Color(0xFF15B86C),
                             ),
                           ],
                         ),
@@ -163,8 +160,8 @@ class _AddTaskState extends State<AddTask> {
                       final pref = await SharedPreferences.getInstance();
                       final taskListJson = pref.getString("tasks");
                       List<dynamic> taskListMaped = [];
-                      if(taskListJson != null) {
-                          taskListMaped = jsonDecode(taskListJson);
+                      if (taskListJson != null) {
+                        taskListMaped = jsonDecode(taskListJson);
                       }
 
                       final TaskModel newTask = TaskModel(
@@ -173,19 +170,15 @@ class _AddTaskState extends State<AddTask> {
                         taskDescription: taskDescriptionController.text,
                         isHighPriority: isHighPriority,
                       );
-                      
-                      
-                      //using toJson() of the TaskModel method to so that we can add to the 
+
+                      //using toJson() of the TaskModel method to so that we can add to the
                       //dynamic list of tasks
-                      taskListMaped.add(newTask.toJson()); 
+                      taskListMaped.add(newTask.toJson());
                       final taskListEncoded = jsonEncode(taskListMaped);
                       await pref.setString("tasks", taskListEncoded);
-                      
-                      
                     }
                     Navigator.of(context).pop();
-                 
-                   },
+                  },
                   label: Text("Add Task"),
                   icon: Icon(Icons.add),
                   style: ElevatedButton.styleFrom(
