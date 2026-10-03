@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/add_task.dart';
-import 'package:tasky/widgets/task_list_widget.dart';
+import 'package:tasky/widgets/achieved_tasks_widget.dart';
+import 'package:tasky/widgets/high_priority_tasks_widget.dart';
+import 'package:tasky/widgets/sliver_task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String? username = "friend";
   List<TaskModel> tasks = [];
   bool isLoading = false;
+  int totalTasksDone = 0;
+  int totalTasks = 0;
+  double donePercentage = 0;
 
   @override
   void initState() {
@@ -28,10 +33,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _getUserName() async {
-    final pref = await SharedPreferences.getInstance();
-
     setState(() {
-      username = pref.getString("username");
+      username = PrefrencesManager().getString("username");
     });
   }
 
@@ -39,8 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isLoading = true;
     });
-    final pref = await SharedPreferences.getInstance();
-    final retrievedJsonTasks = pref.getString("tasks");
+
+    final retrievedJsonTasks = PrefrencesManager().getString("tasks");
 
     if (retrievedJsonTasks != null) {
       List<dynamic> tasksDecoded = jsonDecode(retrievedJsonTasks);
@@ -52,7 +55,25 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {
       isLoading = false;
+      _calDonePercentage();
     });
+  }
+
+  double _calDonePercentage() {
+    totalTasks = tasks.length;
+    totalTasksDone = tasks.where((e) => e.isDone).length;
+    donePercentage = totalTasks == 0 ? 0 : totalTasksDone / totalTasks;
+    return donePercentage;
+  }
+
+  void _updateTasks(bool? value, int? index) async {
+    setState(() {
+      tasks[index!].isDone = value ?? false;
+      _calDonePercentage();
+    });
+
+    final updatedTasks = tasks.map((element) => element.toJson()).toList();
+    await PrefrencesManager().setString("tasks", jsonEncode(updatedTasks));
   }
 
   @override
@@ -62,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 44,
         child: FloatingActionButton.extended(
           onPressed: () async {
-            await Navigator.push(
+            final result = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) {
@@ -70,7 +91,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             );
-            _loadTasks();
+            if (result != null && result) {
+              _loadTasks();
+            }
           },
           backgroundColor: Color(0xFF15B86C),
           foregroundColor: Color(0xFFFFFCFC),
@@ -81,88 +104,99 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Image.asset(
-                  "assets/images/avatar.png",
-                  width: 42,
-                  height: 42,
-                ),
-                SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Good Evening, $username",
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                        //decoration: tasks[index].isDone? TextDecoration.strikethrough : TextDecoration.none,
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(
+                        "assets/images/avatar.png",
+                        width: 42,
+                        height: 42,
                       ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      "One task at a time. One step closer.",
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good Evening, $username",
+                            style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              //decoration: tasks[index].isDone? TextDecoration.strikethrough : TextDecoration.none,
+                            ),
+                          ),
+                          SizedBox(height: 2),
+                          Text(
+                            "One task at a time. One step closer.",
+                            style: TextStyle(
+                              color: Color(0xFFFFFFFF),
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
                       ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    "Yuhuu ,Your work Is ",
+                    style: TextStyle(
+                      color: Color(0xFFFFFCFC),
+                      fontSize: 32,
+                      fontWeight: FontWeight.w400,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text(
-              "Yuhuu ,Your work Is ",
-              style: TextStyle(
-                color: Color(0xFFFFFCFC),
-                fontSize: 32,
-                fontWeight: FontWeight.w400,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "almost done ! ",
+                        style: TextStyle(
+                          color: Color(0xFFFFFCFC),
+                          fontSize: 32,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SvgPicture.asset("assets/images/waving-hand.svg"),
+                    ],
+                  ),
+                  SizedBox(height: 16),
+                  AchievedTasksWidget(
+                    totalTasksDone: totalTasksDone,
+                    totalTasks: totalTasks,
+                    donePercentage: donePercentage,
+                  ),
+                  SizedBox(height: 8),
+                  HighPriorityTasksWidget(
+                    tasks: tasks,
+                    onTap: (bool? value, int? index) {
+                      _updateTasks(value, index);
+                    },
+                    refresh: () {
+                      _loadTasks();
+                    },
+                  ),
+                  SizedBox(height: 24),
+                ],
               ),
             ),
-            Row(
-              children: [
-                Text(
-                  "almost done ! ",
-                  style: TextStyle(
-                    color: Color(0xFFFFFCFC),
-                    fontSize: 32,
-                    fontWeight: FontWeight.w400,
+            isLoading
+                ? SliverToBoxAdapter(
+                    child: Center(child: CircularProgressIndicator()),
+                  )
+                : SliverTaskListWidget(
+                    tasks: tasks,
+                    onTap: (bool? value, int? index) {
+                      _updateTasks(value, index);
+                    },
                   ),
-                ),
-                SvgPicture.asset("assets/images/waving-hand.svg"),
-              ],
-            ),
-            SizedBox(height: 16),
-            Expanded(
-              child: isLoading
-                  ? Center(child: CircularProgressIndicator(value: 20))
-                  : TaskListWidget(
-                      tasks: tasks,
-                      onTap: (bool? value, int? index) async {
-                        setState(() {
-                          tasks[index!].isDone = value ?? false;
-                        });
-                        final pref = await SharedPreferences.getInstance();
-                        final updatedTasks = tasks
-                            .map((element) => element.toJson())
-                            .toList();
-                        await pref.setString(
-                          "tasks",
-                          jsonEncode(updatedTasks),
-                        );
-                      },
-                    ),
-            ),
           ],
         ),
       ),

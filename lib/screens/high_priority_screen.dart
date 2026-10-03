@@ -1,19 +1,19 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/models/task_model.dart';
-import 'dart:convert';
-
 import 'package:tasky/widgets/task_list_widget.dart';
 
-class TodoScreen extends StatefulWidget {
-  const TodoScreen({super.key});
+class HighPriorityScreen extends StatefulWidget {
+  const HighPriorityScreen({super.key});
 
   @override
-  State<TodoScreen> createState() => _TodoScreenState();
+  State<HighPriorityScreen> createState() => _HighPriorityScreenState();
 }
 
-class _TodoScreenState extends State<TodoScreen> {
-  List<TaskModel> tasks = [];
+class _HighPriorityScreenState extends State<HighPriorityScreen> {
+  List<TaskModel> highPriorityTasks = [];
   bool isLoading = false;
 
   @override
@@ -32,12 +32,14 @@ class _TodoScreenState extends State<TodoScreen> {
     if (retrievedJsonTasks != null) {
       List<dynamic> tasksDecoded = jsonDecode(retrievedJsonTasks);
       setState(() {
-        tasks = tasksDecoded.map((element) {
+        highPriorityTasks = tasksDecoded.map((element) {
           return TaskModel.fromJson(element);
         }).toList();
-        tasks = tasks
-            .where((task) => !task.isDone)
-            .toList(); // "!" before any expression reverses the expression so here it's saying where isDone = false
+        highPriorityTasks = highPriorityTasks
+            .where((task) => task.isHighPriority)
+            .toList();
+
+        highPriorityTasks = highPriorityTasks.reversed.toList();
       });
     }
     setState(() {
@@ -48,17 +50,17 @@ class _TodoScreenState extends State<TodoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("To Do Taks")),
+      appBar: AppBar(title: Text("High Prioroity Tasks")),
       body: Padding(
         padding: EdgeInsetsGeometry.all(16),
         child: isLoading
             ? Center(child: CircularProgressIndicator(value: 20))
             : TaskListWidget(
                 emptyMessage: "No Tasks Found",
-                tasks: tasks,
+                tasks: highPriorityTasks,
                 onTap: (bool? value, int? index) async {
                   setState(() {
-                    tasks[index!].isDone = value ?? false;
+                    highPriorityTasks[index!].isDone = value ?? false;
                   });
 
                   final allPreviousTasks = PrefrencesManager().getString(
@@ -72,11 +74,12 @@ class _TodoScreenState extends State<TodoScreen> {
                     // this is where we get the idex of the tasks we're in from the main list (in
                     // home screen) not the current "undone" to-do list
                     int currentTaskIndex = previousTaskList.indexWhere(
-                      (e) => e.id == tasks[index!].id,
+                      (e) => e.id == highPriorityTasks[index!].id,
                     );
                     // this replaces the old data in the old main list with the new
                     //status of the task
-                    previousTaskList[currentTaskIndex] = tasks[index!];
+                    previousTaskList[currentTaskIndex] =
+                        highPriorityTasks[index!];
                     await PrefrencesManager().setString(
                       "tasks",
                       jsonEncode(previousTaskList),

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/Core/Widgets/custom_text_form_field.dart';
+import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/models/task_model.dart';
 
 class AddTask extends StatefulWidget {
@@ -45,85 +46,24 @@ class _AddTaskState extends State<AddTask> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Task Name",
-                          style: TextStyle(
-                            color: Color(0xFFFFFCFC),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
+                        // adding new custome text form field
+                        CustomTextFormField(
+                          label: "Task Name",
                           controller: taskNameController,
-
+                          hintText: "Enter Task Name",
                           validator: (String? value) {
-                            if (value == null || value.trim().isEmpty) {
-                              return "Please enter Task Name";
+                            if (value?.trim().isEmpty ?? false) {
+                              return "Please enter task name";
                             }
                             return null;
                           },
-                          style: TextStyle(
-                            color: Color(0xFFFFFCFC),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "e.g. Prepare food",
-                            hintStyle: TextStyle(
-                              color: Color(0xFF6D6D6D),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFF282828),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          cursorColor: Colors.white,
                         ),
                         SizedBox(height: 20),
-
-                        Text(
-                          "Task Description",
-                          style: TextStyle(
-                            color: Color(0xFFFFFCFC),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
+                        CustomTextFormField(
+                          label: "Task Description",
                           controller: taskDescriptionController,
+                          hintText: "Enter Task Description",
                           maxLines: 5,
-                          // validator: (String? value) {
-                          //   if (value == null || value.trim().isEmpty) {
-                          //     return "Please enter Task Description";
-                          //   }
-                          //   return null;
-                          // },
-                          style: TextStyle(
-                            color: Color(0xFFFFFCFC),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: "e.g. Prepare food",
-                            hintStyle: TextStyle(
-                              color: Color(0xFF6D6D6D),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            filled: true,
-                            fillColor: Color(0xFF282828),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          cursorColor: Colors.white,
                         ),
 
                         SizedBox(height: 24),
@@ -157,8 +97,8 @@ class _AddTaskState extends State<AddTask> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-                      final pref = await SharedPreferences.getInstance();
-                      final taskListJson = pref.getString("tasks");
+                      final taskListJson = PrefrencesManager().getString("tasks");
+
                       List<dynamic> taskListMaped = [];
                       if (taskListJson != null) {
                         taskListMaped = jsonDecode(taskListJson);
@@ -175,15 +115,17 @@ class _AddTaskState extends State<AddTask> {
                       //dynamic list of tasks
                       taskListMaped.add(newTask.toJson());
                       final taskListEncoded = jsonEncode(taskListMaped);
-                      await pref.setString("tasks", taskListEncoded);
+                      await PrefrencesManager().setString(
+                        "tasks",
+                        taskListEncoded,
+                      );
+
+                      Navigator.of(context).pop(true);
                     }
-                    Navigator.of(context).pop();
                   },
                   label: Text("Add Task"),
                   icon: Icon(Icons.add),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF15B86C),
-                    foregroundColor: Color(0xFFFFFCFC),
                     fixedSize: Size(MediaQuery.of(context).size.width, 40),
                   ),
                 ),

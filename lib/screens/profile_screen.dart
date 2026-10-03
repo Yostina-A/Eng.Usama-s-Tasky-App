@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/Core/services/prefences_manager.dart';
+import 'package:tasky/screens/start_screen.dart';
+import 'package:tasky/screens/user_details_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,21 +12,24 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  late final String username;
+  late String username;
+  late String motivationQuote;
   bool isLoading = true;
   bool isDarkMode = true;
 
   @override
   void initState() {
     super.initState();
-    _getUserName();
+    _loadData();
   }
 
-  void _getUserName() async {
-    final pref = await SharedPreferences.getInstance();
-
+  void _loadData() async {
     setState(() {
-      username = pref.getString("username") ?? "User Name";
+      username = PrefrencesManager().getString("username") ?? "User Name";
+      motivationQuote =
+          PrefrencesManager().getString("motivationQuote") ??
+          "One task at a time. Real progress.";
+
       isLoading = false;
     });
   }
@@ -105,7 +110,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         Text(
-                          "One task at a time. One step closer.",
+                          motivationQuote,
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
@@ -126,7 +131,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   // first row
                   ListTile(
-                    onTap: () {}, // makes the entire row clickable
+                    // onTap makes the entire row clickable
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) {
+                            return UserDetailsScreen(
+                              userName: username,
+                              motivationQuote: motivationQuote,
+                            );
+                          },
+                        ),
+                      );
+                      if (result != null && result) {
+                        _loadData();
+                      }
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       "User Profile",
@@ -156,8 +177,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         setState(() {
                           isDarkMode = value;
                         });
-                      }, 
-                      value: isDarkMode),
+                      },
+                      value: isDarkMode,
+                    ),
                   ),
                   Divider(
                     color: Color(0xFFCAC4D0),
@@ -167,7 +189,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   // third row
                   ListTile(
-                    onTap: () {}, // makes the entire row clickable
+                    // makes the entire row clickable
+                    onTap: () async {
+                      PrefrencesManager().remove("tasks");
+                      PrefrencesManager().remove("username");
+                      PrefrencesManager().remove("motivationQuote");
+
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (BuildContext context) => StartScreen(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       "Log Out",

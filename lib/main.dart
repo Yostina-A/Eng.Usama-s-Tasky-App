@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/screens/main_screen.dart';
 import 'screens/start_screen.dart';
 
@@ -7,8 +7,12 @@ import 'screens/start_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final pref = await SharedPreferences.getInstance();
-  String? username = pref.getString("username");
+  // new way of getting an instance of the shared prefrences using prefrenced manager class
+  // and it's a one instance across all the app
+
+  await PrefrencesManager().init();
+
+  String? username = PrefrencesManager().getString("username");
 
   runApp(MyApp(username: username));
 }
@@ -23,6 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tasky',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFF181818),
         appBarTheme: AppBarTheme(
@@ -56,6 +61,12 @@ class MyApp extends StatelessWidget {
             return 2;
           }),
 
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
+            backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+          )
         ),
       ),
       home: username == null ? StartScreen() : MainScreen(),
