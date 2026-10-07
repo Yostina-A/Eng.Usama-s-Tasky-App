@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 
 class AchievedTasksWidget extends StatelessWidget {
   const AchievedTasksWidget({
@@ -20,7 +21,7 @@ class AchievedTasksWidget extends StatelessWidget {
       padding: EdgeInsets.all(16),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Color(0xFF282828),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -29,10 +30,15 @@ class AchievedTasksWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text("Achieved Tasks", style: TextStyle(color: Colors.white)),
+              Text(
+                "Achieved Tasks",
+                style: Theme.of(context).extension<TextStyles>()!.bodyOne,
+              ),
               Text(
                 "$totalTasksDone out of $totalTasks done.",
-                style: TextStyle(color: Colors.white),
+                style: Theme.of(
+                  context,
+                ).extension<TextStyles>()!.secondaryText2,
               ),
             ],
           ),
@@ -57,7 +63,11 @@ class AchievedTasksWidget extends StatelessWidget {
               ),
               Text(
                 "${(donePercentage * 100).toInt()} %",
-                style: TextStyle(color: Colors.white),
+
+                style: Theme.of(context)
+                    .extension<TextStyles>()!
+                    .bodyTwo!
+                    .copyWith(fontWeight: FontWeight.w500),
               ),
             ],
           ),

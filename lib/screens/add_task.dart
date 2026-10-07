@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tasky/Core/Widgets/custom_text_form_field.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/models/task_model.dart';
 
 class AddTask extends StatefulWidget {
@@ -73,11 +74,7 @@ class _AddTaskState extends State<AddTask> {
                           children: [
                             Text(
                               "High Priority?",
-                              style: TextStyle(
-                                color: Color(0xFFFFFCFC),
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
+                              style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                             ),
                             Switch(
                               value: isHighPriority,

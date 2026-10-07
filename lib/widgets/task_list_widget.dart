@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tasky/Core/Widgets/custom_checkox_widget.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/models/task_model.dart';
 
 class TaskListWidget extends StatelessWidget {
@@ -19,7 +21,7 @@ class TaskListWidget extends StatelessWidget {
         ? Center(
             child: Text(
               emptyMessage ?? "No Data",
-              style: TextStyle(color: Colors.white),
+              style: Theme.of(context).extension<TextStyles>()!.bodyOne,
             ),
           )
         : ListView.builder(
@@ -34,21 +36,17 @@ class TaskListWidget extends StatelessWidget {
                   height: 56,
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                    color: Color(0xFF282828),
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   // the row of each task components
                   child: Row(
                     children: [
-                      Checkbox(
+                      CustomCheckBox(
                         value: tasks[index].isDone,
                         onChanged: (bool? value) {
                           onTap(value, index);
                         },
-                        activeColor: Color(0xFF15B86C),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4),
-                        ),
                       ),
 
                       Expanded(
@@ -59,32 +57,26 @@ class TaskListWidget extends StatelessWidget {
                             //task name
                             Text(
                               tasks[index].taskName,
-                              style: TextStyle(
-                                color: tasks[index].isDone
-                                    ? Color(0xFFA0A0A0)
-                                    : Color(0xFFFFFCFC),
-                                decoration: tasks[index].isDone
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                                decorationColor: Color(0xFFA0A0A0),
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              style: tasks[index].isDone
+                                ? Theme.of(
+                                    context,
+                                  ).extension<TextStyles>()!.doneTask
+                                : Theme.of(
+                                    context,
+                                  ).extension<TextStyles>()!.undoneTask,
                               maxLines: 1,
                             ),
                             //task decription
                             if (tasks[index].taskDescription.isNotEmpty)
                               Text(
                                 tasks[index].taskDescription,
-                                style: TextStyle(
-                                  color: tasks[index].isDone
-                                      ? Color(0xFFA0A0A0)
-                                      : Color(0xFFFFFCFC),
-                                  decoration: tasks[index].isDone
-                                      ? TextDecoration.lineThrough
-                                      : TextDecoration.none,
-                                  decorationColor: Color(0xFFA0A0A0),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
+                                style: tasks[index].isDone
+                                ? Theme.of(
+                                    context,
+                                  ).extension<TextStyles>()!.doneTask
+                                : Theme.of(
+                                    context,
+                                  ).extension<TextStyles>()!.secondaryText2,
                                 maxLines: 1,
                               ),
                           ],

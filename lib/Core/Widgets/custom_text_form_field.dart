@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 
 class CustomTextFormField extends StatelessWidget {
- CustomTextFormField({
+  CustomTextFormField({
     super.key,
     required this.label,
     required this.controller,
@@ -21,14 +22,7 @@ class CustomTextFormField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: Color(0xFFFFFCFC),
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
+        Text(label, style: Theme.of(context).extension<TextStyles>()!.bodyOne),
         SizedBox(height: 20),
         TextFormField(
           controller: controller,
@@ -36,25 +30,8 @@ class CustomTextFormField extends StatelessWidget {
           validator: validator != null
               ? (String? value) => validator!(value)
               : null,
-          style: TextStyle(
-            color: Color(0xFFFFFCFC),
-            fontSize: 16,
-            fontWeight: FontWeight.w400,
-          ),
-          decoration: InputDecoration(
-            hintText: hintText,
-            hintStyle: TextStyle(
-              color: Color(0xFF6D6D6D),
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-            filled: true,
-            fillColor: Color(0xFF282828),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
-            ),
-          ),
+          style: Theme.of(context).extension<TextStyles>()!.secondaryText1,
+          decoration: InputDecoration(hintText: hintText),
           cursorColor: Colors.white,
         ),
       ],

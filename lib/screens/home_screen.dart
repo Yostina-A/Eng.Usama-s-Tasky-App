@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/add_task.dart';
 import 'package:tasky/widgets/achieved_tasks_widget.dart';
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Color(0xFF15B86C),
           foregroundColor: Color(0xFFFFFCFC),
           icon: Icon(Icons.add),
-          label: Text("Add New Task", style: TextStyle(fontSize: 16)),
+          label: Text("Add New Task", style: Theme.of(context).extension<TextStyles>()!.primaryButtonText),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
@@ -125,21 +126,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Text(
                             "Good Evening, $username",
-                            style: TextStyle(
-                              color: Color(0xFFFFFFFF),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400,
-                              //decoration: tasks[index].isDone? TextDecoration.strikethrough : TextDecoration.none,
-                            ),
+                            style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                           ),
                           SizedBox(height: 2),
                           Text(
                             "One task at a time. One step closer.",
-                            style: TextStyle(
-                              color: Color(0xFFFFFFFF),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: Theme.of(context).extension<TextStyles>()!.secondaryText2,
                           ),
                         ],
                       ),
@@ -148,21 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 16),
                   Text(
                     "Yuhuu ,Your work Is ",
-                    style: TextStyle(
-                      color: Color(0xFFFFFCFC),
-                      fontSize: 32,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).extension<TextStyles>()!.titleOne,
                   ),
                   Row(
                     children: [
                       Text(
                         "almost done ! ",
-                        style: TextStyle(
-                          color: Color(0xFFFFFCFC),
-                          fontSize: 32,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: Theme.of(context).extension<TextStyles>()!.titleOne,
+                        
                       ),
                       SvgPicture.asset("assets/images/waving-hand.svg"),
                     ],

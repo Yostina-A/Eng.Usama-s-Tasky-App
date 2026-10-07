@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/screens/start_screen.dart';
 import 'package:tasky/screens/user_details_screen.dart';
 
@@ -24,7 +25,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _loadData() async {
+    
     setState(() {
+      isLoading = true;
       username = PrefrencesManager().getString("username") ?? "User Name";
       motivationQuote =
           PrefrencesManager().getString("motivationQuote") ??
@@ -68,7 +71,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 46,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color: Color(0xFF282828),
+                                  color:Theme.of(context).colorScheme.primaryContainer,
                                 ),
                                 child: SvgPicture.asset(
                                   "assets/images/camera_icon.svg",
@@ -103,19 +106,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 8),
                         Text(
                           username,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: Theme.of(context).extension<TextStyles>()!.screenTitle,
                         ),
                         Text(
                           motivationQuote,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: Theme.of(context).extension<TextStyles>()!.secondaryText2,
                         ),
                       ],
                     ), // column of the center avatar block
@@ -123,11 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(height: 24),
                   Text(
                     "Profile Info",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                   ),
                   // first row
                   ListTile(
@@ -150,8 +141,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     },
                     contentPadding: EdgeInsets.zero,
                     title: Text(
-                      "User Profile",
-                      style: TextStyle(color: Colors.white),
+                      "User Details",
+                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                     ),
                     leading: SvgPicture.asset("assets/images/profile_icon.svg"),
                     trailing: SvgPicture.asset("assets/images/arrow-right.svg"),
@@ -167,7 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       "Dark Mode",
-                      style: TextStyle(color: Colors.white),
+                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                     ),
                     leading: SvgPicture.asset(
                       "assets/images/dark_mode_icon.svg",
@@ -206,7 +197,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     contentPadding: EdgeInsets.zero,
                     title: Text(
                       "Log Out",
-                      style: TextStyle(color: Colors.white),
+                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                     ),
                     leading: SvgPicture.asset("assets/images/logout_icon.svg"),
                     trailing: SvgPicture.asset("assets/images/arrow-right.svg"),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/Core/Widgets/custom_text_form_field.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
+import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/screens/home_screen.dart';
-
 
 class StartScreen extends StatelessWidget {
   StartScreen({super.key});
@@ -32,11 +32,7 @@ class StartScreen extends StatelessWidget {
                     SizedBox(width: 16),
                     Text(
                       "Tasky",
-                      style: TextStyle(
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w400,
-                        fontSize: 28,
-                      ),
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
                   ],
                 ),
@@ -48,11 +44,7 @@ class StartScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Welcome To Tasky",
-                      style: TextStyle(
-                        color: Color(0xFFFFFCFC),
-                        fontSize: 24,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: Theme.of(context).textTheme.displaySmall,
                     ),
 
                     SizedBox(width: 8),
@@ -65,11 +57,7 @@ class StartScreen extends StatelessWidget {
 
                 Text(
                   "Your productivity journey starts here.",
-                  style: TextStyle(
-                    color: Color(0xFFFFFCFC),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: Theme.of(context).textTheme.headlineMedium,
                 ),
 
                 SizedBox(height: 24),
@@ -101,7 +89,6 @@ class StartScreen extends StatelessWidget {
                       ElevatedButton(
                         onPressed: () async {
                           if (_key.currentState?.validate() ?? false) {
-                            
                             await PrefrencesManager().setString(
                               "username",
                               controller.value.text,
@@ -130,7 +117,7 @@ class StartScreen extends StatelessWidget {
                         ),
                         child: Text(
                           "Let's Get Started",
-                          style: TextStyle(fontSize: 14),
+                          style: Theme.of(context).extension<TextStyles>()!.primaryButtonText,
                         ),
                       ),
                     ],

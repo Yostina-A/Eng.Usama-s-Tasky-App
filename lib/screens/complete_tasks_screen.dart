@@ -47,37 +47,40 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Completed Tasks")),
-      body: TaskListWidget(
-        tasks: tasks,
-        onTap: (bool? value, int? index) async {
-          {
-            setState(() {
-              tasks[index!].isDone = value ?? false;
-            });
-
-            final allPreviousTasks = PrefrencesManager().getString("tasks");
-            if (allPreviousTasks != null) {
-              List<TaskModel> previousTaskList =
-                  (jsonDecode(allPreviousTasks) as List<dynamic>)
-                      .map((element) => TaskModel.fromJson(element))
-                      .toList();
-              // this is where we get the idex of the tasks we're in from the main list (in
-              // home screen) not the current "completed" task list
-              int currentTaskIndex = previousTaskList.indexWhere(
-                (e) => e.id == tasks[index!].id,
-              );
-              // this replaces the old data in the old main list with the new
-              //status of the task
-              previousTaskList[currentTaskIndex] = tasks[index!];
-              await PrefrencesManager().setString(
-                "tasks",
-                jsonEncode(previousTaskList),
-              );
-              _loadTasks();
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: TaskListWidget(
+          tasks: tasks,
+          onTap: (bool? value, int? index) async {
+            {
+              setState(() {
+                tasks[index!].isDone = value ?? false;
+              });
+        
+              final allPreviousTasks = PrefrencesManager().getString("tasks");
+              if (allPreviousTasks != null) {
+                List<TaskModel> previousTaskList =
+                    (jsonDecode(allPreviousTasks) as List<dynamic>)
+                        .map((element) => TaskModel.fromJson(element))
+                        .toList();
+                // this is where we get the idex of the tasks we're in from the main list (in
+                // home screen) not the current "completed" task list
+                int currentTaskIndex = previousTaskList.indexWhere(
+                  (e) => e.id == tasks[index!].id,
+                );
+                // this replaces the old data in the old main list with the new
+                //status of the task
+                previousTaskList[currentTaskIndex] = tasks[index!];
+                await PrefrencesManager().setString(
+                  "tasks",
+                  jsonEncode(previousTaskList),
+                );
+                _loadTasks();
+              }
             }
-          }
-        },
-        emptyMessage: "No Tasks Found",
+          },
+          emptyMessage: "No Tasks Found",
+        ),
       ),
     );
   }

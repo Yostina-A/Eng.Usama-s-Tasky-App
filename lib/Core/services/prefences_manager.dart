@@ -23,7 +23,7 @@ class PrefrencesManager {
     _preferences = await SharedPreferences.getInstance();
   }
 
-  // get
+  // get methods
 
   String? getString(String key){
     return _preferences.getString(key);
@@ -45,7 +45,7 @@ class PrefrencesManager {
     return _preferences.getStringList(key);
   }
 
-  // set
+  // set methods
 
   Future<bool> setString (String key, String value) async{
     return await _preferences.setString(key, value);
