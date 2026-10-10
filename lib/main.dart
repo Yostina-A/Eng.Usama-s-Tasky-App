@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/dark_theme.dart';
 import 'package:tasky/Core/theme/light_theme.dart';
+import 'package:tasky/Core/theme/theme_controller.dart';
 import 'package:tasky/screens/main_screen.dart';
-import 'screens/start_screen.dart';
+import 'screens/welcome_screen.dart';
+
+// value notifier
 
 
 void main() async {
@@ -13,8 +16,9 @@ void main() async {
   // and it's a one instance across all the app
 
   await PrefrencesManager().init();
-
   String? username = PrefrencesManager().getString("username");
+
+  ThemeController().init();
 
   runApp(MyApp(username: username));
 }
@@ -27,11 +31,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tasky',
-      debugShowCheckedModeBanner: false,
-      theme: lightMode,
-      home: username == null ? StartScreen() : MainScreen(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: ThemeController.themeNotifier,
+      builder: (context, ThemeMode value, Widget? child) {
+        return MaterialApp(
+          title: 'Tasky',
+          debugShowCheckedModeBanner: false,
+          //default theme
+          theme: lightMode,
+          darkTheme: darkMode,
+          themeMode: value,
+          home: username == null ? WelcomeScreen() : MainScreen(),
+        );
+      },
     );
   }
 }

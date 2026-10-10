@@ -5,8 +5,8 @@ import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/screens/home_screen.dart';
 
-class StartScreen extends StatelessWidget {
-  StartScreen({super.key});
+class WelcomeScreen extends StatelessWidget {
+  WelcomeScreen({super.key});
 
   final TextEditingController controller = TextEditingController();
   final GlobalKey<FormState> _key = GlobalKey<FormState>();

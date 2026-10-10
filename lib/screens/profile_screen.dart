@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
-import 'package:tasky/screens/start_screen.dart';
+import 'package:tasky/Core/theme/theme_controller.dart';
+import 'package:tasky/main.dart';
+import 'package:tasky/screens/welcome_screen.dart';
 import 'package:tasky/screens/user_details_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,7 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String username;
   late String motivationQuote;
   bool isLoading = true;
-  bool isDarkMode = true;
+ 
 
   @override
   void initState() {
@@ -25,13 +27,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _loadData() async {
-    
     setState(() {
       isLoading = true;
       username = PrefrencesManager().getString("username") ?? "User Name";
       motivationQuote =
           PrefrencesManager().getString("motivationQuote") ??
           "One task at a time. Real progress.";
+      
 
       isLoading = false;
     });
@@ -71,7 +73,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 height: 46,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(100),
-                                  color:Theme.of(context).colorScheme.primaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.primaryContainer,
                                 ),
                                 child: SvgPicture.asset(
                                   "assets/images/camera_icon.svg",
@@ -106,11 +110,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 8),
                         Text(
                           username,
-                          style: Theme.of(context).extension<TextStyles>()!.screenTitle,
+                          style: Theme.of(
+                            context,
+                          ).extension<TextStyles>()!.screenTitle,
                         ),
                         Text(
                           motivationQuote,
-                          style: Theme.of(context).extension<TextStyles>()!.secondaryText2,
+                          style: Theme.of(
+                            context,
+                          ).extension<TextStyles>()!.secondaryText2,
                         ),
                       ],
                     ), // column of the center avatar block
@@ -164,12 +172,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       "assets/images/dark_mode_icon.svg",
                     ),
                     trailing: Switch(
-                      onChanged: (bool value) {
-                        setState(() {
-                          isDarkMode = value;
-                        });
+                      onChanged: (bool value) async {
+                        ThemeController.toggleTheme();
                       },
-                      value: isDarkMode,
+                      value: ThemeController.themeNotifier.value == ThemeMode.dark? true : false,
                     ),
                   ),
                   Divider(
@@ -189,7 +195,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(
-                          builder: (BuildContext context) => StartScreen(),
+                          builder: (BuildContext context) => WelcomeScreen(),
                         ),
                         (Route<dynamic> route) => false,
                       );
