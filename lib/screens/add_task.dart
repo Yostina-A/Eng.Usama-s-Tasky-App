@@ -30,10 +30,7 @@ class _AddTaskState extends State<AddTask> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF181818),
-        title: Text("New Task"),
-      ),
+      appBar: AppBar(title: Text("New Task")),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Center(
@@ -74,7 +71,9 @@ class _AddTaskState extends State<AddTask> {
                           children: [
                             Text(
                               "High Priority?",
-                              style: Theme.of(context).extension<TextStyles>()!.bodyOne,
+                              style: Theme.of(
+                                context,
+                              ).extension<TextStyles>()!.bodyOne,
                             ),
                             Switch(
                               value: isHighPriority,
@@ -94,7 +93,9 @@ class _AddTaskState extends State<AddTask> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-                      final taskListJson = PrefrencesManager().getString("tasks");
+                      final taskListJson = PrefrencesManager().getString(
+                        "tasks",
+                      );
 
                       List<dynamic> taskListMaped = [];
                       if (taskListJson != null) {

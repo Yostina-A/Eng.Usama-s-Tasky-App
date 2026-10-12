@@ -40,25 +40,16 @@ ThemeData darkMode = ThemeData(
     style: ButtonStyle(
       foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
       backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+      textStyle: WidgetStateProperty.all(
+        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
     ),
   ),
-  // textTheme: TextTheme(
-  //   displayLarge:,
-  //   displayMedium:,
-  //   displaySmall:,
-  //   headlineLarge:,
-  //   headlineMedium:,
-  //   headlineSmall:,
-  //   titleLarge:,
-  //   titleMedium:,
-  //   titleSmall:,
-  //   bodyLarge:,
-  //   bodyMedium:,
-  //   bodySmall:,
-  //   labelLarge:,
-  //   labelMedium:,
-  //   labelSmall:,
-  // ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF15B86C),
+    foregroundColor: Color(0xFFFFFCFC),
+    extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+  ),
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(
       color: Color(0xFF6D6D6D),
@@ -80,7 +71,29 @@ ThemeData darkMode = ThemeData(
     side: BorderSide(color: Color(0xff6E6E6E), width: 2),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
   ),
-  // TODO: adjust dark theme styles
+  iconTheme: IconThemeData(color: Color(0xffC6C6C6)),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: TextStyle(
+      color: Color(0xffFFFCFC),
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
+    contentPadding: EdgeInsets.zero,
+  ),
+  dividerTheme: DividerThemeData(color: Color(0xFFCAC4D0), thickness: 1),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.white,
+    selectionColor: Color.fromARGB(255, 183, 250, 163),
+    selectionHandleColor: Color(0xFF15B86C),
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Color(0xFF181818),
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: Color(0xFF15B86C),
+    unselectedItemColor: Color(0xFFC6C6C6),
+  ),
+  splashFactory: NoSplash.splashFactory,
+  
   extensions: [
     TextStyles(
       titleOne: TextStyle(
@@ -146,11 +159,6 @@ ThemeData darkMode = ThemeData(
         overflow: TextOverflow.ellipsis,
         decoration: TextDecoration.lineThrough,
         decorationColor: Color(0xffA0A0A0),
-      ),
-      primaryButtonText: TextStyle(
-        color: Color(0xffFFFCFC),
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
       ),
       highPriorityTasksTitle: TextStyle(
         color: Color(0xff15B86C),

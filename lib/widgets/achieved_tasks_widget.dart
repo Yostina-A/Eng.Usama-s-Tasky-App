@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
+import 'package:tasky/Core/theme/theme_controller.dart';
 
 class AchievedTasksWidget extends StatelessWidget {
   const AchievedTasksWidget({
@@ -23,6 +24,8 @@ class AchievedTasksWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+            color: ThemeController.isDark()? Colors.transparent : Color(0xffD1DAD6))
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

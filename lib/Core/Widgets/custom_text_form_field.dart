@@ -32,7 +32,6 @@ class CustomTextFormField extends StatelessWidget {
               : null,
           style: Theme.of(context).extension<TextStyles>()!.secondaryText1,
           decoration: InputDecoration(hintText: hintText),
-          cursorColor: Colors.white,
         ),
       ],
     );

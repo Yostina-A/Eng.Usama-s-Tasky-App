@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/Core/Widgets/custom_svg_picture.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/Core/theme/theme_controller.dart';
@@ -18,7 +19,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   late String username;
   late String motivationQuote;
   bool isLoading = true;
- 
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       motivationQuote =
           PrefrencesManager().getString("motivationQuote") ??
           "One task at a time. Real progress.";
-      
 
       isLoading = false;
     });
@@ -77,10 +76,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     context,
                                   ).colorScheme.primaryContainer,
                                 ),
-                                child: SvgPicture.asset(
-                                  "assets/images/camera_icon.svg",
-                                  // width: 18,
-                                  // height: 18,
+                                child: CustomSvgPicture(
+                                  path: "assets/images/camera_icon.svg",
                                 ),
                               ),
                             ),
@@ -147,43 +144,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         _loadData();
                       }
                     },
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      "User Details",
-                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
+
+                    title: Text("User Details"),
+                    leading: CustomSvgPicture(
+                      path: "assets/images/profile_icon.svg",
                     ),
-                    leading: SvgPicture.asset("assets/images/profile_icon.svg"),
-                    trailing: SvgPicture.asset("assets/images/arrow-right.svg"),
+                    trailing: CustomSvgPicture(
+                      path: "assets/images/arrow-right.svg",
+                    ),
                   ),
-                  Divider(
-                    color: Color(0xFFCAC4D0),
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(),
                   // second row
                   ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      "Dark Mode",
-                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
+                    title: Text("Dark Mode"),
+                    leading: CustomSvgPicture(
+                      path: "assets/images/dark_mode_icon.svg",
                     ),
-                    leading: SvgPicture.asset(
-                      "assets/images/dark_mode_icon.svg",
-                    ),
-                    trailing: Switch(
-                      onChanged: (bool value) async {
-                        ThemeController.toggleTheme();
+                    trailing: ValueListenableBuilder(
+                      valueListenable: ThemeController.themeNotifier,
+                      builder: (context, ThemeMode value, Widget? child) {
+                        return Switch(
+                          onChanged: (bool value) async {
+                            ThemeController.toggleTheme();
+                          },
+                          value: value == ThemeMode.dark,
+                        );
                       },
-                      value: ThemeController.themeNotifier.value == ThemeMode.dark? true : false,
                     ),
                   ),
-                  Divider(
-                    color: Color(0xFFCAC4D0),
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(),
                   // third row
                   ListTile(
                     // makes the entire row clickable
@@ -200,20 +189,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         (Route<dynamic> route) => false,
                       );
                     },
-                    contentPadding: EdgeInsets.zero,
-                    title: Text(
-                      "Log Out",
-                      style: Theme.of(context).extension<TextStyles>()!.bodyOne,
+
+                    title: Text("Log Out"),
+                    leading: CustomSvgPicture(
+                      path: "assets/images/logout_icon.svg",
                     ),
-                    leading: SvgPicture.asset("assets/images/logout_icon.svg"),
-                    trailing: SvgPicture.asset("assets/images/arrow-right.svg"),
+                    trailing: CustomSvgPicture(
+                      path: "assets/images/arrow-right.svg",
+                    ),
                   ),
-                  Divider(
-                    color: Color(0xFFCAC4D0),
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
+                  Divider(),
                 ],
               ), //column 1
             ),

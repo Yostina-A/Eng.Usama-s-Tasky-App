@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky/Core/Widgets/custom_checkox_widget.dart';
+import 'package:tasky/Core/Widgets/custom_svg_picture.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
+import 'package:tasky/Core/theme/theme_controller.dart';
 import 'package:tasky/models/task_model.dart';
 import 'package:tasky/screens/high_priority_screen.dart';
 
@@ -25,6 +27,11 @@ class HighPriorityTasksWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: ThemeController.isDark()
+              ? Colors.transparent
+              : Color(0xffD1DAD6),
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,10 +114,14 @@ class HighPriorityTasksWidget extends StatelessWidget {
                     width: 48,
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.primaryContainer,
-                      border: BoxBorder.all(color: Color(0xff6E6E6E)),
+                      border: Border.all(
+                        color: ThemeController.isDark()
+                            ? Color(0xff6E6E6E)
+                            : Color(0xffD1DAD6),
+                      ),
                       shape: BoxShape.circle,
                     ),
-                    child: SvgPicture.asset(
+                    child: CustomSvgPicture(path:
                       "assets/images/arrow-up-right.svg",
                       height: 10,
                       width: 10,

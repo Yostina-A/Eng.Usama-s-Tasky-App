@@ -26,7 +26,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF181818),
         currentIndex: _currentIndex,
         onTap: (int? index) {
           setState(() {
@@ -35,58 +34,39 @@ class _MainScreenState extends State<MainScreen> {
         },
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/home.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 0 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/home.svg", 0),
             label: "Home",
           ),
 
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/todo.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 1 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/todo.svg", 1),
             label: "To Do",
           ),
 
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/completed.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 2 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/completed.svg", 2),
             label: "Completed",
           ),
 
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/profile.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 3 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/profile.svg", 3),
             label: "Profile",
           ),
         ],
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Color(0xFF15B86C),
-        unselectedItemColor: Color(0xFFC6C6C6),
       ),
       body: SafeArea(child: _screens[_currentIndex]),
+    );
+  }
+
+  SvgPicture _buildSvgPicture(String path, int index) {
+    return SvgPicture.asset(
+      path,
+      colorFilter: ColorFilter.mode(
+        _currentIndex == index
+            ? Theme.of(context).bottomNavigationBarTheme.selectedItemColor!
+            : Theme.of(context).bottomNavigationBarTheme.unselectedItemColor!,
+        BlendMode.srcIn,
+      ),
     );
   }
 }

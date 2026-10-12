@@ -40,75 +40,15 @@ ThemeData lightMode = ThemeData(
     style: ButtonStyle(
       foregroundColor: WidgetStateProperty.all(Color(0xFFFFFFFF)),
       backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+      textStyle: WidgetStateProperty.all(
+        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
     ),
   ),
-  textTheme: TextTheme(
-    displayLarge: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 32,
-      fontWeight: FontWeight.w400,
-    ),
-    displayMedium: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 28,
-      fontWeight: FontWeight.w400,
-    ),
-    displaySmall: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 24,
-      fontWeight: FontWeight.w400,
-    ),
-    headlineLarge: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 20,
-      fontWeight: FontWeight.w400,
-    ),
-    headlineMedium: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-    ),
-    headlineSmall: TextStyle(
-      color: Color(0xff161F1B),
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-    ),
-
-    titleSmall: TextStyle(
-      color: Color(0xff3A4640),
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-    ),
-    bodyLarge: TextStyle(
-      color: Color(0xff3A4640),
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-    ),
-    bodyMedium: TextStyle(
-      color: Color(0xff3A4640),
-      fontSize: 16,
-      fontWeight: FontWeight.w500,
-    ),
-    bodySmall: TextStyle(
-      color: Color(0xff15B86C),
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-    ),
-    labelLarge: TextStyle(
-      color: Color(0xff15B86C),
-      fontSize: 12,
-      fontWeight: FontWeight.w500,
-    ),
-    labelMedium: TextStyle(
-      color: Color(0xff6A6A6A),
-      fontSize: 14,
-      fontWeight: FontWeight.w400,
-    ),
-    labelSmall: TextStyle(
-      color: Color(0xff6A6A6A),
-      fontSize: 16,
-      fontWeight: FontWeight.w400,
-    ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF15B86C),
+    foregroundColor: Color(0xFFFFFFFF),
+    extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
   ),
   inputDecorationTheme: InputDecorationTheme(
     hintStyle: TextStyle(
@@ -143,6 +83,29 @@ ThemeData lightMode = ThemeData(
     side: BorderSide(color: Color(0xffD1DAD6), width: 2),
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
   ),
+  iconTheme: IconThemeData(color: Color(0xff6A6A6A)),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: TextStyle(
+      color: Color(0xff161F1B),
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
+    contentPadding: EdgeInsets.zero,
+  ),
+  dividerTheme: DividerThemeData(color: Color(0xffD1DAD6), thickness: 1),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.black,
+    selectionColor: Color.fromARGB(255, 171, 250, 170),
+    selectionHandleColor: Color(0xFF15B86C),
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Color(0xffF6F7F9),
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: Color(0xFF14A662),
+    unselectedItemColor: Color(0xFF3A4640),
+  ),
+  splashFactory: NoSplash.splashFactory,
+
   extensions: [
     TextStyles(
       titleOne: TextStyle(
@@ -209,17 +172,11 @@ ThemeData lightMode = ThemeData(
         decorationColor: Color(0xff49454F),
         overflow: TextOverflow.ellipsis,
       ),
-      primaryButtonText: TextStyle(
-        color: Color(0xffFFFFFF),
-        fontSize: 14,
-        fontWeight: FontWeight.w500,
-    ),
-    highPriorityTasksTitle: TextStyle(
+      highPriorityTasksTitle: TextStyle(
         color: Color(0xff15B86C),
         fontSize: 14,
         fontWeight: FontWeight.w400,
+      ),
     ),
-    
-  )
   ],
 );

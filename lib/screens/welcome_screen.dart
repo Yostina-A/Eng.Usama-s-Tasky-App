@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/Core/Widgets/custom_svg_picture.dart';
 import 'package:tasky/Core/Widgets/custom_text_form_field.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
@@ -24,7 +25,7 @@ class WelcomeScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(
+                    CustomSvgPicture.withoutColorFilter(path: 
                       "assets/images/logo.svg",
                       width: 42,
                       height: 42,
@@ -32,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
                     SizedBox(width: 16),
                     Text(
                       "Tasky",
-                      style: Theme.of(context).textTheme.displayMedium,
+                      style: Theme.of(context).extension<TextStyles>()!.titleOne,
                     ),
                   ],
                 ),
@@ -44,12 +45,12 @@ class WelcomeScreen extends StatelessWidget {
                   children: [
                     Text(
                       "Welcome To Tasky",
-                      style: Theme.of(context).textTheme.displaySmall,
+                      style: Theme.of(context).extension<TextStyles>()!.titleTwo,
                     ),
 
                     SizedBox(width: 8),
 
-                    SvgPicture.asset("assets/images/waving-hand.svg"),
+                    CustomSvgPicture.withoutColorFilter(path: "assets/images/waving-hand.svg"),
                   ],
                 ),
 
@@ -57,12 +58,12 @@ class WelcomeScreen extends StatelessWidget {
 
                 Text(
                   "Your productivity journey starts here.",
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).extension<TextStyles>()!.bodyOne,
                 ),
 
                 SizedBox(height: 24),
 
-                SvgPicture.asset("assets/images/start_screen_graphic.svg"),
+                CustomSvgPicture.withoutColorFilter(path: "assets/images/start_screen_graphic.svg"),
 
                 SizedBox(height: 28),
 
@@ -115,10 +116,7 @@ class WelcomeScreen extends StatelessWidget {
                             40,
                           ),
                         ),
-                        child: Text(
-                          "Let's Get Started",
-                          style: Theme.of(context).extension<TextStyles>()!.primaryButtonText,
-                        ),
+                        child: Text("Let's Get Started"),
                       ),
                     ],
                   ),

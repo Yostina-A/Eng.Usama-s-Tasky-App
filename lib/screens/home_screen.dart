@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky/Core/Widgets/custom_svg_picture.dart';
 import 'package:tasky/Core/services/prefences_manager.dart';
 import 'package:tasky/Core/theme/text_styles_extention.dart';
 import 'package:tasky/models/task_model.dart';
@@ -96,10 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
               _loadTasks();
             }
           },
-          backgroundColor: Color(0xFF15B86C),
-          foregroundColor: Color(0xFFFFFCFC),
+          
           icon: Icon(Icons.add),
-          label: Text("Add New Task", style: Theme.of(context).extension<TextStyles>()!.primaryButtonText),
+          label: Text("Add New Task"),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),
           ),
@@ -149,7 +149,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: Theme.of(context).extension<TextStyles>()!.titleOne,
                         
                       ),
-                      SvgPicture.asset("assets/images/waving-hand.svg"),
+                      CustomSvgPicture.withoutColorFilter(path: "assets/images/waving-hand.svg"),
                     ],
                   ),
                   SizedBox(height: 16),
